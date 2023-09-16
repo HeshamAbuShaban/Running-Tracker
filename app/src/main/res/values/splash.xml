@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <!--switch to what theme? after splash is done ,go ahead and set your main theme-->
+        <item name="postSplashScreenTheme">@style/Theme.RunningTracker</item>
+
+        <!--BackgroundColor-->
+        <item name="windowSplashScreenIconBackgroundColor">#ffff</item>
+
+        <!--Even if its not animated you still have to choose it-->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_run</item>
+        <!--        <item name="splashScreenIconSize">@dimen/_5sdp</item>-->
+        <!--        <item name="splashScreenIconSize">1dp</item>-->
+        <!--        <item name="windowSplashScreenBackground">@drawable/ic_app_logo_background</item>-->
+
+    </style>
+    <!--After that apply your appStartingActivity theme in manifests to this one-->
+    <!--After that apply installSplashScreen() in appStartingActivity aka MainActivity-->
+</resources>
