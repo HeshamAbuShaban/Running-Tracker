@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">تتبع الجري</string>
+    <string name="adds_a_new_run">يضيف جولة جديدة</string>
+    <string name="your_name">اسمك</string>
+    <string name="your_weight">وزنك</string>
+    <string name="apply_changes">تطبيق التغييرات</string>
+    <string name="welcome_please_enter_your_name_and_weight">مرحبًا!\n الرجاء إدخال اسمك ووزنك.</string>
+    <string name="kg">كغ</string>
+    <string name="_continue">متابعة</string>
+    <string name="total_distance">المسافة الإجمالية</string>
+    <string name="_0km">0 كم</string>
+    <string name="total_time">الوقت الإجمالي</string>
+    <string name="_00_00_00">00:00:00</string>
+    <string name="total_calories_burned">إجمالي السعرات الحرارية المحروقة</string>
+    <string name="_0kcal">0 سعرة حرارية</string>
+    <string name="average_speed">السرعة المتوسطة</string>
+    <string name="_0km_h">0 كم/س</string>
+    <string name="let_s_go_username">هيا نذهب USERNAME!</string>
+    <string name="finish_run">إنهاء الجولة</string>
+    <string name="start">بدء</string>
+    <string name="_00_00_00_00">00:00:00:00</string>
+    <string name="the_journey_tracking_pic">صورة تتبع الرحلة</string>
+    <string name="date">التاريخ</string>
+    <string name="time">الوقت</string>
+    <string name="distance">المسافة</string>
+    <string name="avg_speed">السرعة المتوسطة</string>
+    <string name="calories">السعرات الحرارية</string>
+    <string name="running_app">تطبيق الجري</string>
+    <string name="your_runs">جولاتك</string>
+    <string name="statistics">الإحصائيات</string>
+    <string name="settings">الإعدادات</string>
+    <string name="sort_by">الترتيب حسب:</string>
+    <string-array name="filter_options">
+        <item>التاريخ</item>
+        <item>وقت الجري</item>
+        <item>المسافة</item>
+        <item>السرعة المتوسطة</item>
+        <item>السعرات الحرارية المحروقة</item>
+    </string-array>
+</resources>
