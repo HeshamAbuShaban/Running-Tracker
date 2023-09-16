@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.RunningTracker" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="Theme.RunningTracker" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Original AppCompat attributes. -->
         <!--By-me-->
         <item name="fontFamily">@font/cairo_medium</item>
