@@ -36,6 +36,10 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -50,7 +54,7 @@ android {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
-    hilt {  enableAggregatingTask = true }
+    hilt { enableAggregatingTask = true }
 }
 
 dependencies {
