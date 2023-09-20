@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.gms.maps.GoogleMap
 import dagger.hilt.android.AndroidEntryPoint
 import dev.training.running_tracker.databinding.FragmentTrackingBinding
 import dev.training.running_tracker.ui.viewmodels.MainViewModel
+
 @AndroidEntryPoint
 class TrackingFragment : Fragment() {
 
@@ -16,6 +18,7 @@ class TrackingFragment : Fragment() {
 
     private val mainViewModel: MainViewModel by viewModels()
 
+    private var googleMap: GoogleMap? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -24,4 +27,63 @@ class TrackingFragment : Fragment() {
         binding = FragmentTrackingBinding.inflate(layoutInflater)
         return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupGoogleMapInstance(savedInstanceState)
+    }
+
+    private fun setupGoogleMapInstance(savedInstanceState: Bundle?) {
+        with(binding) {
+            // save the building state to cache it.
+            mapView.onCreate(savedInstanceState)
+
+            //..from the widget when its loaded we demand the Actual Map Instance.
+            mapView.getMapAsync { googleMap ->
+                this@TrackingFragment.googleMap = googleMap
+            }
+
+        }
+    }
+
+    // Mix the widget lifeCycle with our fragment lifeCycle.
+
+    override fun onResume() {
+        super.onResume()
+        binding.mapView.onResume()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.mapView.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding.mapView.onStop()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.mapView.onPause()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding.mapView.onLowMemory()
+    }
+
+    /*
+        override fun onDestroy() {
+            super.onDestroy()
+            binding.mapView.onDestroy()
+        }
+    */
+
+    //.. get the uses of the cached bundle to load faster~.
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        binding.mapView.onSaveInstanceState(outState)
+    }
+
 }
