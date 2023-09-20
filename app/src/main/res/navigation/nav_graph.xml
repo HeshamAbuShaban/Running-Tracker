@@ -9,7 +9,7 @@
         android:id="@+id/runFragment"
         android:name="dev.training.running_tracker.ui.fragments.RunFragment"
         android:label="fragment_run"
-        tools:layout="@layout/fragment_run" >
+        tools:layout="@layout/fragment_run">
         <action
             android:id="@+id/action_runFragment_to_trackingFragment"
             app:destination="@id/trackingFragment" />
@@ -23,7 +23,7 @@
         android:id="@+id/setupFragment"
         android:name="dev.training.running_tracker.ui.fragments.SetupFragment"
         android:label="fragment_setup"
-        tools:layout="@layout/fragment_setup" >
+        tools:layout="@layout/fragment_setup">
         <action
             android:id="@+id/action_setupFragment_to_runFragment"
             app:destination="@id/runFragment" />
@@ -32,7 +32,7 @@
         android:id="@+id/trackingFragment"
         android:name="dev.training.running_tracker.ui.fragments.TrackingFragment"
         android:label="fragment_tracking"
-        tools:layout="@layout/fragment_tracking" >
+        tools:layout="@layout/fragment_tracking">
         <action
             android:id="@+id/action_trackingFragment_to_runFragment"
             app:destination="@id/runFragment" />
@@ -42,4 +42,13 @@
         android:name="dev.training.running_tracker.ui.fragments.StatisticsFragment"
         android:label="fragment_statistics"
         tools:layout="@layout/fragment_statistics" />
+
+    <!--...So here we are defining a Global Action
+     in the case of no owner ,
+     but can be used to make certain movement-->
+    <action
+        android:id="@+id/globalAction_to_trackingFragment"
+        app:destination="@id/trackingFragment"
+        app:launchSingleTop="true" />
+
 </navigation>

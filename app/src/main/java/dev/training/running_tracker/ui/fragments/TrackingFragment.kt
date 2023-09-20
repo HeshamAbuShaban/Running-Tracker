@@ -48,7 +48,9 @@ class TrackingFragment : Fragment() {
 
             // this doesn't literately start the service,
             // rather it send an action each time it been called
-            requireContext().startService(it)}
+            requireContext().startService(it)
+            // STOPSHIP: vid 11
+        }
     }
 
     private fun setupGoogleMapInstance(savedInstanceState: Bundle?) {

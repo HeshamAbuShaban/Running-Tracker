@@ -9,7 +9,7 @@
         <item name="windowSplashScreenIconBackgroundColor">#4E4C4C</item>
 
         <!--Even if its not animated you still have to choose it-->
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_run</item>
 
       </style>
     <!--After that apply your appStartingActivity theme in manifests to this one-->

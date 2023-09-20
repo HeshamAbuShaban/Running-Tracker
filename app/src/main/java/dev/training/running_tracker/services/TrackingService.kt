@@ -1,10 +1,25 @@
 package dev.training.running_tracker.services
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.NotificationManager.IMPORTANCE_LOW
+import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
+import android.content.Context
 import android.content.Intent
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
+import dev.training.running_tracker.R
+import dev.training.running_tracker.services.constants.ServiceConstants
 import dev.training.running_tracker.services.constants.ServiceConstants.ACTION_PAUSE_SERVICE
 import dev.training.running_tracker.services.constants.ServiceConstants.ACTION_START_OR_RESUME_SERVICE
 import dev.training.running_tracker.services.constants.ServiceConstants.ACTION_STOP_SERVICE
+import dev.training.running_tracker.services.constants.ServiceConstants.NOTIFICATION_CHANNEL_ID
+import dev.training.running_tracker.services.constants.ServiceConstants.NOTIFICATION_CHANNEL_NAME
+import dev.training.running_tracker.services.constants.ServiceConstants.NOTIFICATION_ID
+import dev.training.running_tracker.ui.screens.MainActivity
 import timber.log.Timber
 
 /**
@@ -48,6 +63,8 @@ class TrackingService : LifecycleService() {
      * application's communication needs.
      */
 
+    var isFirstRun = true
+
 
     // its called whenever we send a command to our service form the outside
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -55,7 +72,13 @@ class TrackingService : LifecycleService() {
         intent?.let {
             when (it.action) {
                 ACTION_START_OR_RESUME_SERVICE -> {
-                    Timber.d("Started or Resumed Service.")
+                    if (isFirstRun){
+                        //..this the first call for this service
+                        startForegroundService()
+                        isFirstRun = false
+                    }else {
+                        Timber.d("Resuming Service")
+                    }
                 }
 
                 ACTION_PAUSE_SERVICE -> {
@@ -69,6 +92,79 @@ class TrackingService : LifecycleService() {
         }
 
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    //.. Lets make it a foreground service
+    /**
+     * well ofc you'll need a
+     * 1.notification
+     * that means you also need a
+     * 2.notification channel
+     * for higher than android 8
+     *
+     * */
+
+    private fun startForegroundService() {
+        //..get a reference to our notificationManager
+        //..    so we can call the create notification fun
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // we are on android 8 or higher so lets use our fun to create a channel
+            createNotificationChannel(notificationManager)
+        }
+
+        // After the channel been created i crated the notification and set it to be shown as foreground
+        createNotification()
+
+    }
+
+    private fun createNotification() {
+
+        /**
+         * to build a notification we use the builder of the NotificationCompat
+         * and give it the id of the channel
+         * that our notification will be in
+         * */
+        val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+            .setAutoCancel(false) // wont be removed due the user attempts
+            .setOngoing(true) // cant be swiped away
+            .setSmallIcon(R.drawable.ic_run)
+            .setContentTitle("Running App") // Title
+            .setContentText("00:00:00") // Description
+            .setContentIntent(getMainActivityPendingIntent())
+            .build()
+
+        // this to show the notification and stick it as foreground
+        startForeground(NOTIFICATION_ID, notificationBuilder)
+    }
+
+    // This Sends an intent to the main activity which you can check for it and do certain events. (in my case i'll navigate form the home desertion to the tracking fragment)
+    private fun getMainActivityPendingIntent() = PendingIntent.getActivity(
+        this,
+        0,
+        Intent(this, MainActivity::class.java).also {
+            it.action = ServiceConstants.ACTION_SHOW_TRACKING_FRAGMENT
+        },
+        FLAG_UPDATE_CURRENT // that means when ever we lunch the pending intent it will update it self instead of re crating
+    )
+
+    //...Creating a Channel for above than android8 >
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel(notificationManager: NotificationManager) {
+        val channel = NotificationChannel(
+            NOTIFICATION_CHANNEL_ID,
+            NOTIFICATION_CHANNEL_NAME,
+            IMPORTANCE_LOW
+        )
+        /**
+         * the reason for setting to low
+         * that we want to spam the channel constantly
+         * whenever we do that WE DO NOT NEED SOUND WITH THE NOTIFICATION
+         */
+
+        notificationManager.createNotificationChannel(channel)
     }
 
 }
