@@ -19,6 +19,7 @@ import dev.training.running_tracker.services.Polyline
 import dev.training.running_tracker.services.TrackingService
 import dev.training.running_tracker.services.constants.ServiceConstants.ACTION_PAUSE_SERVICE
 import dev.training.running_tracker.services.constants.ServiceConstants.ACTION_START_OR_RESUME_SERVICE
+import dev.training.running_tracker.services.utility.TrackingUtils
 import dev.training.running_tracker.ui.viewmodels.MainViewModel
 
 @AndroidEntryPoint
@@ -33,6 +34,8 @@ class TrackingFragment : Fragment() {
     private var pathPoints = mutableListOf<Polyline>()
 
     private var googleMap: GoogleMap? = null
+
+    private var curTimeInMillis = 0L
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -73,6 +76,12 @@ class TrackingFragment : Fragment() {
             addLatestPolyline()
 
             moveCameraToUser()
+        }
+
+        TrackingService.timeRunInMillis.observe(viewLifecycleOwner) {
+            curTimeInMillis = it
+            val formattedTime = TrackingUtils.getFormattedStopWatchTime(curTimeInMillis, true)
+            binding.tvTimer.text = formattedTime
         }
     }
 

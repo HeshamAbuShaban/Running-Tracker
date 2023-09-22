@@ -9,7 +9,7 @@
         <item name="windowSplashScreenIconBackgroundColor">#ffff</item>
 
         <!--Even if its not animated you still have to choose it-->
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_run</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_app_launcher_foreground</item>
         <!--        <item name="splashScreenIconSize">@dimen/_5sdp</item>-->
         <!--        <item name="splashScreenIconSize">1dp</item>-->
         <!--        <item name="windowSplashScreenBackground">@drawable/ic_app_logo_background</item>-->
