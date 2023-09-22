@@ -38,4 +38,5 @@
         <item>السرعة المتوسطة</item>
         <item>السعرات الحرارية المحروقة</item>
     </string-array>
+    <string name="stop">ايقاف مؤقت</string>
 </resources>
