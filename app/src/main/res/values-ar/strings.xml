@@ -39,4 +39,6 @@
         <item>السعرات الحرارية المحروقة</item>
     </string-array>
     <string name="stop">ايقاف مؤقت</string>
+    <string name="pause">ايقاف مؤقت</string>
+    <string name="resume">استئناف</string>
 </resources>

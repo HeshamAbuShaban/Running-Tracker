@@ -9,6 +9,8 @@
     <!--Service-Permission-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:name=".app_system.BaseApplication"
         android:allowBackup="true"
