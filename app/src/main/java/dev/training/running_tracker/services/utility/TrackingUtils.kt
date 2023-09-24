@@ -1,5 +1,7 @@
 package dev.training.running_tracker.services.utility
 
+import android.location.Location
+import dev.training.running_tracker.services.Polyline
 import java.util.concurrent.TimeUnit
 
 object TrackingUtils {
@@ -28,4 +30,25 @@ object TrackingUtils {
         "${if (hours < 10) "0" else ""}$hours:" +
                 "${if (minutes < 10) "0" else ""}$minutes:" +
                 "${if (seconds < 10) "0" else ""}$seconds"
+
+
+    fun calculatePolylineLength(polyline: Polyline): Float {
+        var distance = 0f
+        for (i in 0..polyline.size - 2) {
+            val firstPos = polyline[i]
+            val secondPos = polyline[i + 1]
+
+            val result = FloatArray(1)
+            Location.distanceBetween(
+                firstPos.latitude,
+                firstPos.longitude,
+                secondPos.latitude,
+                secondPos.longitude,
+                result
+            )
+
+            distance += result[0]
+        }
+        return distance
+    }
 }
