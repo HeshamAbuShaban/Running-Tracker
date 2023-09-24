@@ -1,0 +1,82 @@
+package dev.training.running_tracker.dump.prefs
+
+
+/**
+ * this object singleton class
+ * make the use of the dagger sharedpref instance
+ * with necessary method for the use case in the app
+ * */
+object AppSharedPreferences : BaseASP() {
+
+    /* private enum class SharedPreferencesKeys {
+        NAME, Weight
+    }*/
+    //    private late-init var editor: SharedPreferences.Editor
+
+    //...With Kotlin We replace these lines above with the kt features
+
+    //..Build-it in Parent
+    /*override var sharedPreferences: SharedPreferences = super.sharedPreferences*/
+
+    /*@set:Inject
+    lateinit var sharedPref: dagger.Lazy<SharedPreferences>
+    private val sharedPreferences: SharedPreferences get() = sharedPref.get()*/
+
+    init {
+
+    }
+
+
+    // USERNAME
+    fun getUsername(): String =
+        sharedPreferences.getString(Keys.NAME, "Undefined") ?: "Undefined.."
+
+    private fun putUsername(username: String) {
+        sharedPreferences.edit().apply {
+            putString(Keys.NAME, username)
+            apply()
+        }
+    }
+
+    /*fun removeUsername() {
+        sharedPreferences.edit().apply {
+            remove(Keys.NAME)
+            apply()
+        }
+    }*/
+
+
+    // Weight
+    fun getWeight(): Float =
+        sharedPreferences.getFloat(Keys.WEIGHT, 80f)
+
+    private fun putWeight(weight: String) {
+        sharedPreferences.edit().apply {
+            putFloat(Keys.WEIGHT, weight.toFloat())
+            apply()
+        }
+    }
+
+    /*fun removeWeight() {
+        sharedPreferences.edit().apply {
+            remove(Keys.WEIGHT)
+            apply()
+        }
+    }*/
+
+
+    // Silly addition
+    fun writePersonalDataToSharedPreferences(name: String, weight: String) {
+        putUsername(name)
+        putWeight(weight)
+        sharedPreferences.edit().apply {
+            putBoolean(Keys.FIRST_TIME_TOGGLE, false)
+            apply()
+        }
+    }
+
+    // ...
+    fun getFirstTimeToggle(): Boolean =
+        sharedPreferences.getBoolean(Keys.FIRST_TIME_TOGGLE, true)
+
+}

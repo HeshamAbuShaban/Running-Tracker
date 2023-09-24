@@ -31,6 +31,7 @@ import dev.training.running_tracker.services.constants.ServiceConstants.ACTION_S
 import dev.training.running_tracker.services.utility.TrackingUtils
 import dev.training.running_tracker.ui.viewmodels.MainViewModel
 import java.util.Calendar
+import javax.inject.Inject
 import kotlin.math.round
 
 @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
@@ -51,7 +52,8 @@ class TrackingFragment : Fragment() {
 
     private var menu: Menu? = null
 
-    private var weight = 80f
+    @set:Inject
+    var weight = 80f
 
     override fun onCreateView(
         inflater: LayoutInflater,

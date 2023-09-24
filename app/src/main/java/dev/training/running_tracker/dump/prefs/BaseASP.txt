@@ -1,0 +1,9 @@
+package dev.training.running_tracker.dump.prefs
+
+import android.content.SharedPreferences
+import javax.inject.Inject
+
+abstract class BaseASP {
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
+}
