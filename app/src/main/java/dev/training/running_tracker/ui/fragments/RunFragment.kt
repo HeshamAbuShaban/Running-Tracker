@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -13,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.training.running_tracker.R
 import dev.training.running_tracker.adapters.RunAdapter
 import dev.training.running_tracker.app_system.constants.Constants
+import dev.training.running_tracker.app_system.constants.SortType
 import dev.training.running_tracker.app_system.permissions.TrackingUtility
 import dev.training.running_tracker.database.local.entities.Run
 import dev.training.running_tracker.databinding.FragmentRunBinding
@@ -70,12 +72,34 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun subscribeToObservers() {
-        /*when (binding.spFilter.selectedItem) {
-            R.string.date
-        }*/
-        mainViewModel.runsSortedByDate.observe(viewLifecycleOwner) {
+
+        with(binding.spFilter) {
+            when (mainViewModel.sortType) {
+                SortType.DATE -> setSelection(0)
+                SortType.RUNNING_TIME -> setSelection(1)
+                SortType.DISTANCE -> setSelection(2)
+                SortType.AVG_SPEED -> setSelection(3)
+                SortType.CALORIES_BURNED -> setSelection(4)
+            }
+        }
+
+        binding.spFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                when(position) {
+                    0 -> mainViewModel.sortRuns(SortType.DATE)
+                    1 -> mainViewModel.sortRuns(SortType.RUNNING_TIME)
+                    2 -> mainViewModel.sortRuns(SortType.DISTANCE)
+                    3 -> mainViewModel.sortRuns(SortType.AVG_SPEED)
+                    4 -> mainViewModel.sortRuns(SortType.CALORIES_BURNED)
+                }
+            }
+            override fun onNothingSelected(adapterView: AdapterView<*>?) = Unit
+        }
+
+        mainViewModel.runsSelectedLiveData.observe(viewLifecycleOwner) {
             displayRuns(it)
         }
+
     }
 
     private fun requestPermissions() {
