@@ -9,9 +9,8 @@ import com.bumptech.glide.RequestManager
 import dev.training.running_tracker.database.local.entities.Run
 import dev.training.running_tracker.databinding.ItemRunBinding
 import dev.training.running_tracker.services.utility.TrackingUtils
-import java.util.Calendar
-import java.util.Date
 import javax.inject.Inject
+import kotlin.math.round
 
 class RunAdapter @Inject constructor(private val glide: RequestManager) :
     RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
@@ -20,7 +19,7 @@ class RunAdapter @Inject constructor(private val glide: RequestManager) :
         fun bindData(run: Run) {
             with(binding) {
                 glide.load(run.img).into(ivRunImage)
-                tvDate.text = TrackingUtils.formatDateToString(getRunDate(run.timestamp))
+                tvDate.text = TrackingUtils.formatLongDateToString(run.timestamp)
                 tvAvgSpeed.text = avgSpeedFormat(run.avgSpeedInKMH)
                 tvDistance.text = distanceInKMFormat(run.distanceInMeters)
                 tvTime.text = TrackingUtils.getFormattedStopWatchTime(run.timeInMillis)
@@ -29,14 +28,11 @@ class RunAdapter @Inject constructor(private val glide: RequestManager) :
         }
 
         private fun caloriesBurnedFormat(calories: Int) = "${calories}kcal"
-        private fun distanceInKMFormat(distance: Int) = "${(distance / 1000f)}Km"
-        private fun avgSpeedFormat(avgSpeed: Float) = "${avgSpeed}Km/h"
-        private fun getRunDate(timestamp: Long): Date {
-            val calendar = Calendar.getInstance().apply {
-                timeInMillis = timestamp
-            }
-            return calendar.time
-        }
+        private fun distanceInKMFormat(distance: Int) = "${round(distance / 1000f)}Km"
+        private fun avgSpeedFormat(avgSpeed: Float) = "${round(avgSpeed * 10f) / 10f}Km/h"
+        /* private fun getRunDate(timestamp: Long): Date = Calendar.getInstance().apply {
+             timeInMillis = timestamp
+         }.time*/
 
     }
 

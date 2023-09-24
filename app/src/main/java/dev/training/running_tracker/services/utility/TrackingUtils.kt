@@ -3,7 +3,6 @@ package dev.training.running_tracker.services.utility
 import android.location.Location
 import dev.training.running_tracker.services.Polyline
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -55,7 +54,10 @@ object TrackingUtils {
         return distance
     }
 
-    fun formatDateToString(date: Date): String =
-        SimpleDateFormat("dd.MM.yy", Locale.getDefault()).format(date)
+    /*fun formatDateToString(date: Date): String =
+        SimpleDateFormat("dd.MM.yy", Locale.getDefault()).format(date)*/
+
+    fun formatLongDateToString(long: Long): String =
+        SimpleDateFormat("dd.MM.yy", Locale.getDefault()).format(long)
 
 }
