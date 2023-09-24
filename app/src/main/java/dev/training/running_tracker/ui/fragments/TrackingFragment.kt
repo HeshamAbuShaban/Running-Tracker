@@ -3,14 +3,19 @@ package dev.training.running_tracker.ui.fragments
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import dev.training.running_tracker.R
 import dev.training.running_tracker.app_system.constants.Constants
@@ -19,9 +24,11 @@ import dev.training.running_tracker.services.Polyline
 import dev.training.running_tracker.services.TrackingService
 import dev.training.running_tracker.services.constants.ServiceConstants.ACTION_PAUSE_SERVICE
 import dev.training.running_tracker.services.constants.ServiceConstants.ACTION_START_OR_RESUME_SERVICE
+import dev.training.running_tracker.services.constants.ServiceConstants.ACTION_STOP_SERVICE
 import dev.training.running_tracker.services.utility.TrackingUtils
 import dev.training.running_tracker.ui.viewmodels.MainViewModel
 
+@Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
 @AndroidEntryPoint
 class TrackingFragment : Fragment() {
 
@@ -36,11 +43,15 @@ class TrackingFragment : Fragment() {
     private var googleMap: GoogleMap? = null
 
     private var curTimeInMillis = 0L
+
+    private var menu: Menu? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+        setHasOptionsMenu(true)
         binding = FragmentTrackingBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -53,6 +64,47 @@ class TrackingFragment : Fragment() {
         setupClickListeners()
         //.. Subscribe To Service Observer
         subscribeToObservers()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.toolbar_tracking_menu, menu)
+        this.menu = menu
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        if (curTimeInMillis > 0) {
+            this.menu?.getItem(0)?.isVisible = true
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.miCancelTracking -> {
+                showCancelTrackingDialog()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun showCancelTrackingDialog() {
+        val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialogTheme)
+            .setTitle("Cancel Run")
+            .setMessage("Are u sure you want to cancel the run progress and delete all it data ?")
+            .setIcon(R.drawable.ic_delete)
+            .setPositiveButton("Yes") { _, _ ->
+                cancelRun()
+            }
+            .setNegativeButton("No") { dialogInterface, _ ->
+                dialogInterface.cancel()
+            }.create()
+        dialog.show()
+    }
+
+    private fun cancelRun() {
+        sendCommandToService(ACTION_STOP_SERVICE)
+        findNavController().navigate(R.id.action_trackingFragment_to_runFragment)
     }
 
     private fun setupClickListeners() {
@@ -86,6 +138,7 @@ class TrackingFragment : Fragment() {
     }
 
     private fun toggleRun() = if (isTracking) {
+        menu?.getItem(0)?.isVisible = true
         sendCommandToService(ACTION_PAUSE_SERVICE)
     } else {
         sendCommandToService(ACTION_START_OR_RESUME_SERVICE)
@@ -99,6 +152,7 @@ class TrackingFragment : Fragment() {
             btnToggleRun.text = buttonText
             btnFinishRun.isVisible = finishRunVisible
         }
+        menu?.getItem(0)?.isVisible = if (isTracking) true else return
     }
 
     private fun moveCameraToUser() {

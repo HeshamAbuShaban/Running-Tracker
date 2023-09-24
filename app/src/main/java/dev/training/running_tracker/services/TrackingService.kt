@@ -85,6 +85,7 @@ class TrackingService : LifecycleService() {
      */
 
     private var isFirstRun = true
+    private var serviceKilled = false
 
     @Inject
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -119,6 +120,15 @@ class TrackingService : LifecycleService() {
         }
     }
 
+    @Suppress("DEPRECATION")
+    private fun killService() {
+        serviceKilled = true
+        isFirstRun = true
+        pauseService()
+        postInitialValues()
+        stopForeground(true)
+        stopSelf()
+    }
 
     // its called whenever we send a command to our service form the outside
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -143,6 +153,7 @@ class TrackingService : LifecycleService() {
 
                 ACTION_STOP_SERVICE -> {
                     Timber.d("Stopped Service.")
+                    killService()
                 }
             }
         }
@@ -226,17 +237,18 @@ class TrackingService : LifecycleService() {
             isAccessible = true
             set(curNotificationBuilder, ArrayList<NotificationCompat.Action>())
         }
+        if (!serviceKilled) {
+            //.. set the copy to the base copy and add actions to it
+            curNotificationBuilder = baseNotificationBuilder
+                .addAction(
+                    notificationActionIcon,
+                    notificationActionText,
+                    pendingIntentAction
+                )
 
-        //.. set the copy to the base copy and add actions to it
-        curNotificationBuilder = baseNotificationBuilder
-            .addAction(
-                notificationActionIcon,
-                notificationActionText,
-                pendingIntentAction
-            )
-
-        //..Now lets update the notification by posting the edited one
-        notificationManager.notify(NOTIFICATION_ID, curNotificationBuilder.build())
+            //..Now lets update the notification by posting the edited one
+            notificationManager.notify(NOTIFICATION_ID, curNotificationBuilder.build())
+        }
     }
 
     @Suppress("DEPRECATION")
@@ -318,10 +330,12 @@ class TrackingService : LifecycleService() {
 
         //..Update the time into the notify
         timeRunInSeconds.observe(this) {
-            val notification = curNotificationBuilder
-                .setContentText(TrackingUtils.getFormattedStopWatchTime(it * 1000))
-            //..pushes the updated one
-            notificationManager.notify(NOTIFICATION_ID, notification.build())
+            if (!serviceKilled) {
+                val notification = curNotificationBuilder
+                    .setContentText(TrackingUtils.getFormattedStopWatchTime(it * 1000))
+                //..pushes the updated one
+                notificationManager.notify(NOTIFICATION_ID, notification.build())
+            }
         }
     }
 

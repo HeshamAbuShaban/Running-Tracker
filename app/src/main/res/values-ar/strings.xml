@@ -41,4 +41,5 @@
     <string name="stop">ايقاف مؤقت</string>
     <string name="pause">ايقاف مؤقت</string>
     <string name="resume">استئناف</string>
+    <string name="cancel_run_tracking">إلغاء تشغيل متتبع الجري</string>
 </resources>
