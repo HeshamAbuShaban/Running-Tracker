@@ -11,12 +11,15 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.training.running_tracker.R
+import dev.training.running_tracker.adapters.RunAdapter
 import dev.training.running_tracker.app_system.constants.Constants
 import dev.training.running_tracker.app_system.permissions.TrackingUtility
+import dev.training.running_tracker.database.local.entities.Run
 import dev.training.running_tracker.databinding.FragmentRunBinding
 import dev.training.running_tracker.ui.viewmodels.MainViewModel
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
@@ -24,6 +27,9 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     private lateinit var binding: FragmentRunBinding
 
     private val mainViewModel: MainViewModel by viewModels()
+
+    @Inject
+    lateinit var runAdapter: RunAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,9 +44,11 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         init()
     }
 
-    private fun init(){
+    private fun init() {
         requestPermissions()
         setupListeners()
+        setupRunRecycler()
+        subscribeToObservers()
     }
 
     private fun setupListeners() {
@@ -48,6 +56,25 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             fab.setOnClickListener {
                 findNavController().navigate(R.id.action_runFragment_to_trackingFragment)
             }
+        }
+    }
+
+    private fun setupRunRecycler() {
+        with(binding.rvRuns) {
+            adapter = runAdapter
+        }
+    }
+
+    private fun displayRuns(runs: List<Run>) {
+        runAdapter.runs = runs
+    }
+
+    private fun subscribeToObservers() {
+        /*when (binding.spFilter.selectedItem) {
+            R.string.date
+        }*/
+        mainViewModel.runsSortedByDate.observe(viewLifecycleOwner) {
+            displayRuns(it)
         }
     }
 
