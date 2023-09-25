@@ -24,8 +24,8 @@ android {
         applicationId "dev.training.running_tracker"
         minSdk 21
         targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "2.8.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -97,8 +97,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
 
     // Navigation Components
-    implementation "androidx.navigation:navigation-fragment-ktx:2.7.2"
-    implementation "androidx.navigation:navigation-ui-ktx:2.7.2"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.7.3"
+    implementation "androidx.navigation:navigation-ui-ktx:2.7.3"
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.16.0'

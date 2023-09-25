@@ -42,4 +42,6 @@
     <string name="pause">ايقاف مؤقت</string>
     <string name="resume">استئناف</string>
     <string name="cancel_run_tracking">إلغاء تشغيل متتبع الجري</string>
+    <string name="duration"> المدة </string>
+    <string name="calories_burned">السعرات الحرارية المحروقة</string>
 </resources>

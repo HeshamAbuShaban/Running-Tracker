@@ -1,5 +1,6 @@
 package dev.training.running_tracker.ui.screens
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -12,12 +13,16 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.training.running_tracker.R
 import dev.training.running_tracker.databinding.ActivityMainBinding
 import dev.training.running_tracker.services.constants.ServiceConstants
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var navController: NavController
+
+    @Inject
+    lateinit var username: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -34,7 +39,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
+        setUsernameInToolbar()
         setupBottomNavView()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setUsernameInToolbar() {
+        if (username.isNotEmpty())
+            binding.tvToolbarTitle.text = "Let's run, $username!"
     }
 
     /**

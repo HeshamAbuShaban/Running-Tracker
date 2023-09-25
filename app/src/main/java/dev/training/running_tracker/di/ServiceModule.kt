@@ -44,7 +44,7 @@ object ServiceModule {
             Intent(context, MainActivity::class.java).also {
                 it.action = ServiceConstants.ACTION_SHOW_TRACKING_FRAGMENT
             },
-            PendingIntent.FLAG_UPDATE_CURRENT // that means when ever we lunch the pending intent it will update it self instead of re crating
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT // that means when ever we lunch the pending intent it will update it self instead of re crating
         )
 
     @ServiceScoped

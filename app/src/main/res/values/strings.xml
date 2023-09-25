@@ -35,6 +35,8 @@
     <string name="pause">Pause</string>
     <string name="resume">Resume</string>
     <string name="cancel_run_tracking">Cancel Run Tracking</string>
+    <string name="duration">DURATION</string>
+    <string name="calories_burned">CALORIES BURNED</string>
     <string-array name="filter_options">
         <item>Date</item>
         <item>Running Time</item>
